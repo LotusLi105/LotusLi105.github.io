@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-06T05:00:13.607Z</updated>
+  <updated>2023-10-06T06:21:47.396Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,101 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第二式_应用层</title>
+    <link href="http://example.com/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E5%BA%94%E7%94%A8%E5%B1%82/"/>
+    <id>http://example.com/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E5%BA%94%E7%94%A8%E5%B1%82/</id>
+    <published>2023-10-06T06:15:11.000Z</published>
+    <updated>2023-10-06T06:21:47.396Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;code&gt;1.IP协议是网络协议的核心，但它并不提供可靠服务，主要有以下几点原因：&lt;/code&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="逍遥独步剑_计算机网络自顶向下" scheme="http://example.com/categories/%E9%80%8D%E9%81%A5%E7%8B%AC%E6%AD%A5%E5%89%91-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/"/>
+    
+    
+    <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>第一式_计算机网络概述</title>
+    <link href="http://example.com/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/"/>
+    <id>http://example.com/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/</id>
+    <published>2023-10-06T06:05:45.000Z</published>
+    <updated>2023-10-06T06:21:36.966Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;code&gt;1.互联网是网络的网络&lt;/code&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="逍遥独步剑_计算机网络自顶向下" scheme="http://example.com/categories/%E9%80%8D%E9%81%A5%E7%8B%AC%E6%AD%A5%E5%89%91-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E8%87%AA%E9%A1%B6%E5%90%91%E4%B8%8B/"/>
+    
+    
+    <category term="计算机网络" scheme="http://example.com/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>uco_lab1</title>
+    <link href="http://example.com/2023/10/06/uco-lab1/"/>
+    <id>http://example.com/2023/10/06/uco-lab1/</id>
+    <published>2023-10-06T05:58:51.000Z</published>
+    <updated>2023-10-06T06:21:32.636Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;练习&quot;&gt;&lt;a href=&quot;#练习&quot; class=&quot;headerlink&quot; title=&quot;练习&quot;&gt;&lt;/a&gt;练习&lt;/h1&gt;</summary>
+    
+    
+    
+    <category term="ucore" scheme="http://example.com/categories/ucore/"/>
+    
+    
+    <category term="小楼昨夜又东风_os" scheme="http://example.com/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ucore_lab0</title>
+    <link href="http://example.com/2023/10/06/ucore-lab0/"/>
+    <id>http://example.com/2023/10/06/ucore-lab0/</id>
+    <published>2023-10-06T05:49:23.000Z</published>
+    <updated>2023-10-06T06:21:25.336Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;ucore启动过程&quot;&gt;&lt;a href=&quot;#ucore启动过程&quot; class=&quot;headerlink&quot; title=&quot;ucore启动过程&quot;&gt;&lt;/a&gt;ucore启动过程&lt;/h1&gt;&lt;h2 id=&quot;1-从复位代码处开始执行&quot;&gt;&lt;a href=&quot;#1-从复位代码处开始执行&quot; class=&quot;headerlink&quot; title=&quot;1.从复位代码处开始执行&quot;&gt;&lt;/a&gt;1.从复位代码处开始执行&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="ucore" scheme="http://example.com/categories/ucore/"/>
+    
+    
+    <category term="小楼昨夜又东风_os" scheme="http://example.com/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>第三式_虚拟内存</title>
+    <link href="http://example.com/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/"/>
+    <id>http://example.com/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/</id>
+    <published>2023-10-06T05:04:41.000Z</published>
+    <updated>2023-10-06T05:40:43.057Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;code&gt;1.虚拟内存技术不仅可以对计算机主存进行抽象，还可以为每个程序提供独立的地址空间，使同时运行的程序互不干扰&lt;/code&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="相夷太剑" scheme="http://example.com/categories/%E7%9B%B8%E5%A4%B7%E5%A4%AA%E5%89%91/"/>
+    
+    
+    <category term="小楼昨夜又东风_os" scheme="http://example.com/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/"/>
+    
+  </entry>
   
   <entry>
     <title>第二式_进程和线程</title>
@@ -56,29 +151,6 @@
     
     
     <category term="小楼昨夜又东风_os" scheme="http://example.com/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Hello World</title>
-    <link href="http://example.com/2022/10/06/hello-world/"/>
-    <id>http://example.com/2022/10/06/hello-world/</id>
-    <published>2022-10-05T16:00:00.000Z</published>
-    <updated>2023-10-06T04:01:05.397Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
-&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a href=&quot;#Create-a-new-post&quot; class=&quot;headerlink&quot; title=&quot;Create a new post&quot;&gt;&lt;/a&gt;Create a new post&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo new &lt;span class=&quot;string&quot;&gt;&amp;quot;My New Post&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/writing.html&quot;&gt;Writing&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&quot;Run-server&quot;&gt;&lt;a href=&quot;#Run-server&quot; class=&quot;headerlink&quot; title=&quot;Run server&quot;&gt;&lt;/a&gt;Run server&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="测试" scheme="http://example.com/categories/%E6%B5%8B%E8%AF%95/"/>
-    
-    
-    <category term="测试" scheme="http://example.com/tags/%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   

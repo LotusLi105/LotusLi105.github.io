@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+
+<html lang="zh-CN">
+  
+
+    <head>
+      <meta charset="utf-8" />
+        
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1"
+      />
+      <title>ucore_lab0 |  岛</title>
+  <meta name="generator" content="hexo-theme-ayer">
+      
+      <link rel="shortcut icon" href="/favicon.ico" />
+       
+<link rel="stylesheet" href="/dist/main.css">
+
+      
+<link rel="stylesheet" href="/css/fonts/remixicon.css">
+
+      
+<link rel="stylesheet" href="/css/custom.css">
+ 
+      <script src="https://cdn.staticfile.org/pace/1.2.4/pace.min.js"></script>
+       
+ 
+
+      <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-bulma@5.0.1/bulma.min.css"
+      />
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+      <!-- mermaid -->
+      
+      <style>
+        .swal2-styled.swal2-confirm {
+          font-size: 1.6rem;
+        }
+      </style>
+    <link rel="alternate" href="/atom.xml" title="岛" type="application/atom+xml">
+</head>
+  </html>
+</html>
+
+
+<body>
+  <div id="app">
+    
+      
+    <main class="content on">
+      <section class="outer">
+  <article
+  id="post-ucore-lab0"
+  class="article article-type-post"
+  itemscope
+  itemprop="blogPost"
+  data-scroll-reveal
+>
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  ucore_lab0
+</h1>
+ 
+
+      
+    </header>
+     
+    <div class="article-meta">
+      <a href="/2023/10/06/ucore-lab0/" class="article-date">
+  <time datetime="2023-10-06T05:49:23.000Z" itemprop="datePublished">2023-10-06</time>
+</a> 
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/ucore/">ucore</a>
+  </div>
+  
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> 字数统计:</span>
+            <span class="post-count">2.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> 阅读时长≈</span>
+            <span class="post-count">8 分钟</span>
+        </span>
+    </span>
+</div>
+ 
+    </div>
+      
+    <div class="tocbot"></div>
+
+
+
+
+  
+    <div class="article-entry" itemprop="articleBody">
+       
+  <h1 id="ucore启动过程"><a href="#ucore启动过程" class="headerlink" title="ucore启动过程"></a>ucore启动过程</h1><h2 id="1-从复位代码处开始执行"><a href="#1-从复位代码处开始执行" class="headerlink" title="1.从复位代码处开始执行"></a>1.从复位代码处开始执行</h2><span id="more"></span>
+<ul>
+<li>主板上电后，首先执行复位代码。在QEMU模拟的这款risc-v处理器中，将复位向量地址初始化为0x1000，再将PC初始化为该复位地址，因此处理器将从此处开始执行复位代码，复位代码主要是将计算机系统的各个组件（包括处理器、内存、设备等）置于初始状态，并且会启动Bootloader，0x80000000是链接的起始位置，Bootloader将加载操作系统内核并启动操作系统的执行（但在我们的lab0中操作系统内核已经被qemu加载到指定地址）。<img src="/2023/10/06/ucore-lab0/bootloader.png" alt="1"></li>
+<li>完成计算机系统各个组件初始化后，准备跳转到bootloader（OpenSBI固件）处执行，此时t0寄存器存储的即为bootloader入口地址<img src="/bootloader%20and%20r.png" alt="2"></li>
+<li>以上复位寄存器处代码存储在<code>~/qemu-3.1.0/hw/riscv/spike.c</code>中（qemu-3.1.0由命名确定）</li>
+<li><code>0x100c:	ld	t0,24(t0)</code>在t0初始化为0x1000后，t0+24可以访问到地址0x1018，而这个地址在加载初期就已经初始化为0x80000000，所以即使在0x1018位置显示的是unimp，执行<code>0x1010:	jr	t0</code>依旧可以跳转到地址0x80000000。<img src="/2023/10/06/ucore-lab0/0x1018.png" alt="13"></li>
+</ul>
+<h2 id="2-OpenSBI"><a href="#2-OpenSBI" class="headerlink" title="2.OpenSBI"></a>2.OpenSBI</h2><p>代码跳转到0x80000000处后控制权转交给OpenSBI，此时OpenSBI要经历以下几个阶段</p>
+<h3 id="底层初始化阶段"><a href="#底层初始化阶段" class="headerlink" title="底层初始化阶段"></a>底层初始化阶段</h3><ul>
+<li><p><strong>判断hard id</strong>：取启动处理器的 ID，并将其保存到寄存器 a6 中，然后检查该处理器是否为启动处理器，如果不是则跳转到等待重定位完成的循环中，否则执行接下来的步骤。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">0x80000000      csrr   a6,mhartid</span><br><span class="line">0x80000008      auipc  t0,0x0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>代码重定位</strong>：如果未成功获取启动处理器 ID 或者获取到的处理器 ID 不是当前处理器，则执行随机选择重定位目标地址的过程，即尝试从 <code>_relocate_lottery</code> 标签处开始循环等待。根据 <code>_link_start</code> 和 <code>_link_end</code> 标签获取链接地址， <code>_load_start</code> 标签获取加载地址，并判断二者是否相同。如果不同，则需要进行重定位操作。在我们的ucore中通过gdb追踪代码如下：<br><img src="/2023/10/06/ucore-lab0/%E4%BB%A3%E7%A0%811.png" alt="3"></p>
+</li>
+<li><p><strong>清除寄存器值</strong>：在完成代码重定位后，我们需要清除寄存器值，继续使用gdb追踪代码如下：</p>
+<p><img src="/2023/10/06/ucore-lab0/%E6%B8%85%E7%A9%BA%E5%AF%84%E5%AD%98%E5%99%A8.png" alt="15">&nbsp;</p>
+<blockquote>
+<p>调用0x80000550处函数进行寄存器初始化</p>
+</blockquote>
+<p><img src="/2023/10/06/ucore-lab0/0x80000550.png" alt="14"></p>
+</li>
+<li><p><strong>清除bss段</strong>：如果要想c语言执行起来，必须要做的事情有两个，一个是设置sp栈地址，另外就是清除bss段。<br><img src="/2023/10/06/ucore-lab0/%E4%BB%A3%E7%A0%812.png" alt="4"></p>
+</li>
+<li><p><strong>准备 scratch 空间</strong>：从地址0x800001b8开始我们进行初始化<code>struct sbi_scratch</code> 结构体，这个结构体将会传递给 <code>sbi_init()</code> 函数。（篇幅原因仅列出部分代码）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> _scratch_init:</span><br><span class="line">/*</span><br><span class="line"></span><br><span class="line">+ The following registers hold values that are computed before</span><br><span class="line">+ entering this block, and should remain unchanged.</span><br><span class="line">*</span><br><span class="line">+ t3 -&gt; the firmware end address</span><br><span class="line">+ s7 -&gt; HART count</span><br><span class="line">+ s8 -&gt; HART stack size</span><br><span class="line">+ s9 -&gt; Heap Size</span><br><span class="line">+ s10 -&gt; Heap Offset</span><br><span class="line">*/</span><br><span class="line">add tp, t3, zero</span><br><span class="line">sub tp, tp, s9</span><br><span class="line">mul a5, s8, t1</span><br><span class="line">sub tp, tp, a5</span><br><span class="line">li a5, SBI_SCRATCH_SIZE</span><br><span class="line">sub tp, tp, a5</span><br><span class="line"></span><br><span class="line">/*Initialize scratch space*/</span><br><span class="line">/*Store fw_start and fw_size in scratch space*/</span><br><span class="line">lla a4, _fw_start</span><br><span class="line">sub a5, t3, a4</span><br><span class="line">REG_S a4, SBI_SCRATCH_FW_START_OFFSET(tp)</span><br><span class="line">REG_S a5, SBI_SCRATCH_FW_SIZE_OFFSET(tp)</span><br><span class="line"></span><br><span class="line">/*Store R/W section&#x27;s offset in scratch space*/</span><br><span class="line">lla a5, _fw_rw_start</span><br><span class="line">sub a5, a5, a4</span><br><span class="line">REG_S a5, SBI_SCRATCH_FW_RW_OFFSET(tp)</span><br><span class="line"></span><br><span class="line">/*Store fw_heap_offset and fw_heap_size in scratch space*/</span><br><span class="line">REG_S s10, SBI_SCRATCH_FW_HEAP_OFFSET(tp)</span><br><span class="line">REG_S s9, SBI_SCRATCH_FW_HEAP_SIZE_OFFSET(tp)</span><br><span class="line"></span><br><span class="line">/*Store next arg1 in scratch space*/</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line">call fw_next_arg1</span><br><span class="line">REG_S a0, SBI_SCRATCH_NEXT_ARG1_OFFSET(tp)</span><br><span class="line">MOV_3R a0, s0, a1, s1, a2, s2</span><br><span class="line">/*Store next address in scratch space*/</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line">call fw_next_addr</span><br><span class="line">REG_S a0, SBI_SCRATCH_NEXT_ADDR_OFFSET(tp)</span><br><span class="line">MOV_3R a0, s0, a1, s1, a2, s2</span><br><span class="line">/*Store next mode in scratch space*/</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line">call fw_next_mode</span><br><span class="line">REG_S a0, SBI_SCRATCH_NEXT_MODE_OFFSET(tp)</span><br><span class="line">MOV_3R a0, s0, a1, s1, a2, s2</span><br><span class="line">/*Store warm_boot address in scratch space*/</span><br><span class="line">lla a4, _start_warm</span><br><span class="line">REG_S a4, SBI_SCRATCH_WARMBOOT_ADDR_OFFSET(tp)</span><br><span class="line">/* Store platform address in scratch space */</span><br><span class="line">lla a4, platform</span><br><span class="line">REG_S a4, SBI_SCRATCH_PLATFORM_ADDR_OFFSET(tp)</span><br><span class="line">/* Store hartid-to-scratch function address in scratch space */</span><br><span class="line">lla a4,_hartid_to_scratch</span><br><span class="line">REG_S a4, SBI_SCRATCH_HARTID_TO_SCRATCH_OFFSET(tp)</span><br><span class="line">/*Store trap-exit function address in scratch space*/</span><br><span class="line">lla a4, _trap_exit</span><br><span class="line">REG_S a4, SBI_SCRATCH_TRAP_EXIT_OFFSET(tp)</span><br><span class="line">/* Clear tmp0 in scratch space */</span><br><span class="line">REG_S zero, SBI_SCRATCH_TMP0_OFFSET(tp)</span><br><span class="line">/* Store firmware options in scratch space */</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>读取设备树（Flattend Device Tree, FDT）</strong>：首先，通过前一个启动阶段传递过来的参数 a0、a1 和 a2，保存了当前 FDT 的源地址指针。接着，通过调用函数 fw_next_arg1()获取下一个启动阶段传递过来的参数 a1，即将被重定位到的 FDT 的目标地址指针。如果 a1 为 0 或者 a1 等于当前 FDT 的源地址指针，则说明不需要进行重定位，直接跳转到_fdt_reloc_done 标签处。如果需要进行重定位，则需要计算出源 FDT 的大小，并将其从源地址拷贝到目标地址，完成重定位。具体操作如下：</p>
+<ol>
+<li>首先，将目标地址按照指针大小对齐，并保存为 t1。</li>
+<li>然后，从源地址中读取 FDT 大小，该大小为大端格式，需要将其拆分为四个字节：bit[31:24]、bit[23:16]、bit[15:8]和 bit[7:0]，并组合成小端格式，保存在 t2 寄存器中。</li>
+<li>接着，将 t1 加上 t2，得到目标 FDT 的结束地址，保存在 t2 寄存器中。这样就确定了拷贝数据的范围。</li>
+<li>最后，循环拷贝数据，将源 FDT 中的数据拷贝到目标 FDT 中。循环次数为源 FDT 大小除以指针大小，即源 FDT 中包含的指针数量。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">_fdt_reloc_again:</span><br><span class="line">REG_L t3, 0(t0)</span><br><span class="line">REG_S t3, 0(t1)</span><br><span class="line">add t0, t0, **SIZEOF_POINTER**</span><br><span class="line">add t1, t1, **SIZEOF_POINTER**</span><br><span class="line">blt t1, t2,_fdt_reloc_again</span><br><span class="line">_fdt_reloc_done:</span><br><span class="line"></span><br><span class="line">/*mark boot hart done*/</span><br><span class="line">li t0, BOOT_STATUS_BOOT_HART_DONE</span><br><span class="line">lla t1, _boot_status</span><br><span class="line">REG_S t0, 0(t1)</span><br><span class="line">fence rw, rw</span><br><span class="line">j _start_warm</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p> 完成拷贝后，将 BOOT_STATUS_BOOT_HART_DONE 保存到_boot_status 寄存器中，表示当前处理器已经完成启动。最后，通过调用_start_warm 跳转到下一步操作。</p>
+</li>
+<li><p><strong>_start_warm</strong>：在初始化过程中，需要禁用和清除所有中断，并设置当前处理器的栈指针和 <code>trap handler</code>（异常处理函数）。使用gdb具体追踪，代码如下：</p>
+<p><img src="/2023/10/06/ucore-lab0/0x8000039e.png" alt="16"></p>
+<p> 具体执行过程如下：</p>
+<ol>
+<li>首先，调用<code>_reset_regs</code>函数，将寄存器状态重置为 0，以保证非引导处理器使用前的状态干净、一致。</li>
+<li>接着，禁用和清空所有中断，即将 CSR_MIE 和 CSR_MIP 寄存器都设置为 0。</li>
+<li>获取 platform 变量的地址，并读取平台配置信息，包括处理器数量（s7）和每个处理器的栈大小（s8）。</li>
+<li>获取当前处理器的 ID（s6），并判断其是否超出了处理器数量的范围。如果超出，则跳转到_start_hang 标签，表示出现了错误。</li>
+<li>计算当前处理器对应的 scratch space 的地址，并将其保存到 CSR_MSCRATCH 寄存器中，作为 SBI 运行时的全局变量。</li>
+<li>将 scratch space 地址保存到 SP 寄存器中，作为当前处理器的栈指针。</li>
+<li>设置 trap handler 为<code>_trap_handler</code>函数，即当发生异常时会跳转到该函数进行处理。同时，读取 MTVEC 寄存器的值确保 trap handler 已经设置成功。</li>
+<li>调用<code>sbi_init</code>函数进行 SBI 运行时的初始化。<code>sbi_init</code>函数将会初始化各种全局变量、锁、Hart Table 等</li>
+</ol>
+<p>  <img src="/2023/10/06/ucore-lab0/init.png" alt="5"></p>
+<ol start="9">
+<li>最后，通过跳转到_start_hang 标签等待处理器发生异常或被重置。</li>
+</ol>
+</li>
+<li><p><strong>跳转至设备初始化</strong><br>在一系列的初始化之后，需要进行跳转进行内核的加载。此时，可以分析一下程序是在哪里进行跳转的。<br>首先猜想是直接通过地址跳转，所以将0x8000000开始的代码进行检查。以下为部分代码：</p>
+<p><img src="/2023/10/06/ucore-lab0/0x80008762.png" alt="9"></p>
+<p>在文档内直接搜索，可以发现代码中并没有直接跳转至0x80200000，于是推测是通过寄存器进行跳转。</p>
+<p><img src="/2023/10/06/ucore-lab0/4.%E6%90%9C%E7%B4%A2%E6%97%A0%E7%BB%93%E6%9E%9C.png" alt="10"></p>
+<p>在刚进入gdb后，在0x80200000地址处进行断点，然后直接continue</p>
+<p><img src="/1.%E6%89%93%E6%96%AD%E7%82%B9%20%E8%B7%B3%E8%BD%AC.png" alt="7"></p>
+<p>在跳转后可以发现，下一步就是<kern_entry></p>
+<p><img src="/2023/10/06/ucore-lab0/2.%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BD.png" alt="8"></p>
+<p>通过<code>info r</code>，查看此时的寄存器存储情况</p>
+<p><img src="/2023/10/06/ucore-lab0/5.%E5%AF%84%E5%AD%98%E5%99%A8%E6%83%85%E5%86%B5.png" alt="11"></p>
+<p>观察可以发现，寄存器t0、a2、a7存储的值为0x80200000<br>返回代码处进行搜索回溯，再配合在gdb的多次调试，最终发现是在运行完0x80005036后跳转到了0x80200000</p>
+<p><img src="/2023/10/06/ucore-lab0/6.%E8%B7%B3%E8%BD%AC.png" alt="12"></p>
+</li>
+</ul>
+<h3 id="OpenSBI设备初始化"><a href="#OpenSBI设备初始化" class="headerlink" title="OpenSBI设备初始化"></a><strong>OpenSBI设备初始化</strong></h3><p>  在前面的过程中opensbi已经基本启动完成，接下来主要进行设备初始化，然后将控制权交给操作系统内核</p>
+<p>  <img src="/2023/10/06/ucore-lab0/opensbi.png" alt="6"></p>
+<h1 id="操作系统知识点与原理"><a href="#操作系统知识点与原理" class="headerlink" title="操作系统知识点与原理"></a>操作系统知识点与原理</h1><ul>
+<li>使用链接脚本描述内存布局</li>
+<li>使用编译工具交叉编译内核，进而生成内核映像</li>
+<li>使用opensbi作为bootloader<ul>
+<li>对应操作系统知识:在计算机启动时，需要先运行一段固化在计算机主板上的程序完成上电和加载操作系统的程序即bootloader</li>
+</ul>
+</li>
+<li>使用 OpenSBI 提供的服务，在屏幕上格式化打印字符串</li>
+<li>使用gdb调试程序</li>
+</ul>
+<h1 id="该实验未涉及的知识点"><a href="#该实验未涉及的知识点" class="headerlink" title="该实验未涉及的知识点"></a>该实验未涉及的知识点</h1><ul>
+<li>sbi是一种riscv架构中用于操作系统（OS）和硬件监管程序（Hypervisor）之间的标准接口。 它定义了一组指令和数据结构，以使OS和Hypervisor能够共同使用处理器和其他硬件资源。</li>
+<li>riscv特权等级</li>
+</ul>
+ 
+      <!-- reward -->
+      
+    </div>
+    
+
+    <!-- copyright -->
+    
+    <footer class="article-footer">
+       
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        分享
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/10/06/ucore-lab0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>  
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/" rel="tag">小楼昨夜又东风_os</a></li></ul>
+
+    </footer>
+  </div>
+
+   
+  <nav class="article-nav">
+    
+      <a href="/2023/10/06/uco-lab1/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            uco_lab1
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">第三式_虚拟内存</div>
+      </a>
+    
+  </nav>
+
+   
+<!-- valine评论 -->
+<div id="vcomments-box">
+  <div id="vcomments"></div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src="https://cdn.staticfile.org/valine/1.4.16/Valine.min.js"></script>
+<script>
+  new Valine({
+    el: "#vcomments",
+    app_id: "",
+    app_key: "",
+    path: window.location.pathname,
+    avatar: "monsterid",
+    placeholder: "给我的文章加点评论吧~",
+    recordIP: true,
+  });
+  const infoEle = document.querySelector("#vcomments .info");
+  if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+    infoEle.childNodes.forEach(function (item) {
+      item.parentNode.removeChild(item);
+    });
+  }
+</script>
+<style>
+  #vcomments-box {
+    padding: 5px 30px;
+  }
+
+  @media screen and (max-width: 800px) {
+    #vcomments-box {
+      padding: 5px 0px;
+    }
+  }
+
+  #vcomments-box #vcomments {
+    background-color: #fff;
+  }
+
+  .v .vlist .vcard .vh {
+    padding-right: 20px;
+  }
+
+  .v .vlist .vcard {
+    padding-left: 10px;
+  }
+</style>
+
+ 
+   
+     
+</article>
+
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2023
+        <i class="ri-heart-fill heart_icon"></i> lxy
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>访问人数:<span id="busuanzi_value_site_uv"></span></span>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>浏览次数:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      
+      <li>
+          <img src="/images/beian.png"></img>
+          <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=01234567890123" target="_black" rel="nofollow">浙公网安备01234567890123号</a>
+      </li>
+        
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+        <script type="text/javascript" src=''></script>
+        
+      </li>
+    </ul>
+  </div>
+</footer>    
+    </main>
+    <div class="float_btns">
+      <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+    </div>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="岛"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">归档</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories">分类</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/%E6%97%85%E8%A1%8C/">旅行</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" target="_blank" rel="noopener" href="http://shenyu-vip.lofter.com">摄影</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/friends">友链</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/2019/about">关于我</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="搜索">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i>请我喝杯咖啡吧~</p>
+  <div class="reward-box">
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/alipay.jpg">
+      <span class="reward-type">支付宝</span>
+    </div>
+    
+    
+    <div class="reward-item">
+      <img class="reward-img" src="/images/wechat.jpg">
+      <span class="reward-type">微信</span>
+    </div>
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-3.6.0.min.js"></script>
+ 
+<script src="/js/lazyload.min.js"></script>
+
+<!-- Tocbot -->
+ 
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  tocbot.init({
+    tocSelector: ".tocbot",
+    contentSelector: ".article-entry",
+    headingSelector: "h1, h2, h3, h4, h5, h6",
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: "main",
+    positionFixedSelector: ".tocbot",
+    positionFixedClass: "is-position-fixed",
+    fixedSidebarOffset: "auto",
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.js"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.staticfile.org/jquery-modal/0.9.2/jquery.modal.min.css"
+/>
+<script src="https://cdn.staticfile.org/justifiedGallery/3.8.1/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+<!-- ImageViewer -->
+ <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.staticfile.org/photoswipe/4.1.3/default-skin/default-skin.min.css">
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe.min.js"></script>
+<script src="https://cdn.staticfile.org/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script> 
+<!-- MathJax -->
+ <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.staticfile.org/mathjax/2.7.7/MathJax.js"></script>
+<script src="https://cdn.staticfile.org/mathjax/2.7.7/config/TeX-AMS-MML_HTMLorMML-full.js"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true,
+  };
+</script>
+
+<!-- Katex -->
+
+<!-- busuanzi  -->
+ 
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+ 
+<!-- ClickLove -->
+
+<!-- ClickBoom1 -->
+
+<!-- ClickBoom2 -->
+
+<!-- CodeCopy -->
+ 
+<link rel="stylesheet" href="/css/clipboard.css">
+ <script src="https://cdn.staticfile.org/clipboard.js/2.0.10/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+ 
+<!-- CanvasBackground -->
+
+<script>
+  if (window.mermaid) {
+    mermaid.initialize({ theme: "forest" });
+  }
+</script>
+
+
+    
+    
+
+  </div>
+</body>
+
+</html>

@@ -1,27 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2022/10/06/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+    <title>uco_lab1</title>
+    <url>/2023/10/06/uco-lab1/</url>
+    <content><![CDATA[<h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><span id="more"></span>
+<h2 id="练习1"><a href="#练习1" class="headerlink" title="练习1"></a>练习1</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#include &lt;mmu.h&gt;</span><br><span class="line">#include &lt;memlayout.h&gt;</span><br><span class="line"></span><br><span class="line">    .section .text,&quot;ax&quot;,%progbits</span><br><span class="line">    .globl kern_entry</span><br><span class="line">kern_entry:</span><br><span class="line">    la sp, bootstacktop</span><br><span class="line"></span><br><span class="line">    tail kern_init</span><br><span class="line"></span><br><span class="line">.section .data</span><br><span class="line">    # .align 2^12</span><br><span class="line">    .align PGSHIFT</span><br><span class="line">    .global bootstack</span><br><span class="line">bootstack:</span><br><span class="line">    .space KSTACKSIZE</span><br><span class="line">    .global bootstacktop</span><br><span class="line">bootstacktop:</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>la sp, bootstacktop完成了将bootstacktop标签处的地址值赋给sp的操作，该汇编语句的作用是初始化操作系统内核栈</p>
+</li>
+<li><p>tail kern_init用于实现函数调用，这是一种特殊的函数调用，称为尾调用（tail call）。尾调用是一种优化技术，它在调用一个函数之后，不需要在返回时执行额外的操作，而是直接跳转到被调用函数的入口点，这有助于减少栈空间的使用，同时可以确保内核不会返回到引导加载程序或操作系统之外。该语句用于将控制权转移给真正的入口点kern_init。</p>
+</li>
+</ol>
+<h2 id="练习2"><a href="#练习2" class="headerlink" title="练习2"></a>练习2</h2><p>1.实现过程：</p>
+<ul>
+<li>在init.c中初始化时钟中断clock_init();</li>
+<li>在trap.c中首先设置下次时钟中断- clock_set_next_event()</li>
+<li>计数器（ticks）加一</li>
+<li>当计数器加到100的时候，我们会输出一个<code>100ticks</code>表示我们触发了100次时钟中断，同时打印次数（num）加一</li>
+<li>判断打印次数，当打印次数为10时，调用&lt;sbi.h&gt;中的关机函数关机</li>
+</ul>
+<p>2.中断处理流程：</p>
+<ul>
+<li>在init.c中初始化时钟中断clock_init();</li>
+<li>触发时钟中断后，stvec寄存器中保存了中断异常处理函数的入口地址</li>
+<li>在trapentry.S中保存寄存器值，然后将控制权交给真正处理函数入口点</li>
+<li>在trap.c中根据中断异常处理类型调用相关函数进行处理</li>
+</ul>
+<h3 id="challenge1"><a href="#challenge1" class="headerlink" title="challenge1"></a>challenge1</h3><ol>
+<li><p>ucore中断异常的处理流程：当时钟中断产生时，操作系统会保存pc中触发中断异常的指令地址，同时将pc值设为stvec寄存器的值（中断处理程序的入口点），跳转到<code>kern/trap/trapentry.S</code>的<code>__alltraps</code>标记，保存当前执行流的上下文，并通过函数调用，切换为<code>kern/trap/trap.c</code>的中断处理函数<code>trap()</code>的上下文，进入<code>trap()</code>的执行流。<br>切换前的上下文作为一个结构体，传递给<code>trap()</code>作为函数参数 -&gt; <code>kern/trap/trap.c</code>按照中断类型进行分发(<code>trap_dispatch(), interrupt_handler()</code>)-&gt;执行时钟中断对应的处理语句，累加计数器，设置下一次时钟中断-&gt;完成处理，返回到<code>kern/trap/trapentry.S</code>-&gt;恢复原先的上下文，中断处理结束。</p>
+<br>
+</li>
+<li><p>mov a0，sp的目的：该语句其实是在为下面这条汇编调用c函数的汇编语句jal trap，准备执行环境，a0寄存器在riscv体系结构中是用来传递函数调用参数的，将sp值赋给a0，其实就是将保存切换前的上下文的栈地址传递给函数void trap(struct trapframe *tf) { trap_dispatch(tf);}，将栈指针的值传递给异常处理程序，以便它可以访问当前的栈帧和栈上的数据。</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">__alltraps:</span><br><span class="line">   SAVE_ALL</span><br><span class="line"></span><br><span class="line">   move  a0, sp</span><br><span class="line">   jal trap</span><br><span class="line">   # sp should be the same as before &quot;jal trap&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SAVE_ALL中寄寄存器保存在栈中的位置由当前栈顶指针sp确定</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">addi sp, sp, -36 * REGBYTES</span><br><span class="line"># save x registers</span><br><span class="line">STORE x0, 0*REGBYTES(sp)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不需要，保存寄存器的需求取决于中断的类型和处理程序的具体需求，不同类型的中断可能需要保存不同的寄存器，保存和恢复所有寄存器可能会引入额外的开销，包括内存访问和指令执行。如果中断处理程序可以在不保存所有寄存器的情况下正常工作，那么可以减小中断处理的开销，提高性能。一般来说，中断和异常可以分为两种类型：可屏蔽中断（Maskable Interrupts）和非可屏蔽中断和异常（Non-Maskable Interrupts and Exceptions）。对于可屏蔽中断，可以选择在进入中断处理程序之前保存和恢复一部分寄存器，而不是所有寄存器。对于非可屏蔽中断和异常，通常会保存所有寄存器，因为无法信任中断处理程序的行为，需要确保所有寄存器状态都能够被完全恢复。</p>
+</li>
+</ol>
+<h3 id="challenge2"><a href="#challenge2" class="headerlink" title="challenge2"></a>challenge2</h3><ol>
+<li><p>csrw sscratch, sp；csrrw s0, sscratch, x0实现了什么操作：csrw sscratch, sp将sp寄存器中的值赋给sscratch，csrrw s0, sscratch, x0将sscratch的当前值写入目标寄存器<code>s0</code>，并将CSR <code>sscratch</code> 的值设置为零。<br>目的：保存之前写到sscratch里的sp的值</p>
+ <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">     .macro SAVE_ALL</span><br><span class="line"></span><br><span class="line">    csrw sscratch, sp</span><br><span class="line"></span><br><span class="line">    addi sp, sp, -36 * REGBYTES</span><br><span class="line">    ......</span><br><span class="line">    # get sr, epc, badvaddr, cause</span><br><span class="line">    # Set sscratch register to 0, so that if a recursive exception</span><br><span class="line">    # occurs, the exception vector knows it came from the kernel</span><br><span class="line">    csrrw s0, sscratch, x0</span><br><span class="line">--------------------------------------------------------</span><br><span class="line">    .macro RESTORE_ALL</span><br><span class="line"></span><br><span class="line">    LOAD s1, 32*REGBYTES(sp)</span><br><span class="line">    LOAD s2, 33*REGBYTES(sp)</span><br><span class="line"></span><br><span class="line">    csrw sstatus, s1</span><br><span class="line">    csrw sepc, s2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这主要是因为badvaddr寄存器和cause寄存器中保存的分别是出错的地址以及出错的原因，在处理中断时可以利用这些信息，当我们处理完这个中断的时候，也就不需要这两个寄存器中保存的值，所以可以不用恢复这两个寄存器。而当由新的中断发生时，系统会自动设置这两个寄存器的值</p>
+</li>
+</ol>
+<h3 id="challenge3"><a href="#challenge3" class="headerlink" title="challenge3"></a>challenge3</h3><ol>
+<li>出现中断时，中断返回地址 mepc 的值被更新为下一条尚未执行的指令</li>
+</ol>
+<p> 出现异常时，中断返回地址 mepc 的值被更新为当前发生异常的指令 PC，在异常处理程序中软件改变 mepc 指向下一条指令，由于现在 ecall&#x2F;ebreak（或 c.ebreak）是 4（或 2）字节指令，因此改写设定 mepc&#x3D;mepc+4（或+2）即可。</p>
+<ol start="2">
+<li>代码见编程部分</li>
+</ol>
+<h1 id="操作系统知识点与原理"><a href="#操作系统知识点与原理" class="headerlink" title="操作系统知识点与原理"></a>操作系统知识点与原理</h1><ul>
+<li>riscv中断相关知识</li>
+<li>中断前后如何进行上下文环境的保存与恢复</li>
+<li>ucore如何处理最简单的断点中断和时钟中断</li>
+</ul>
+<h1 id="该实验未涉及知识点"><a href="#该实验未涉及知识点" class="headerlink" title="该实验未涉及知识点"></a>该实验未涉及知识点</h1><ul>
+<li>ucore为riscv架构，和x86有所不同。在x86架构计算机中，操作系统处理中断和异常前会先初始化idt，即中断异常处理向量表，来保存中断和异常处理对应的函数。</li>
+<li>sepc：出现中断时，中断返回地址 sepc 的值被更新为下一条尚未执行的指令地址出现异常时，中断返回地址 sepc 的值被更新为当前发生异常的指令 PC，在异常处理程序中软件改变 sepc 指向下一条指令，由于现在 ecall&#x2F;ebreak（或 c.ebreak）是 4（或 2）字节指令，因此改写设定 sepc&#x3D;sepc+4（或+2）即可。</li>
+<li>stvec：保存中断处理程序入口地址</li>
+<li>sscratch：保存用户程序栈指针sp</li>
+<li>scause：它会记录中断发生的原因，还会记录该中断是不是一个外部中断</li>
+<li>stval：它会记录一些中断处理所需要的辅助信息，比如指令获取(instruction fetch)、访存、缺页异常，它会把发生问题的目标地址或者出错的指令记录下来，这样我们在中断处理程序中就知道处理目标了。</li>
+</ul>
 ]]></content>
       <categories>
-        <category>测试</category>
+        <category>ucore</category>
       </categories>
       <tags>
-        <tag>测试</tag>
+        <tag>小楼昨夜又东风_os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ucore_lab0</title>
+    <url>/2023/10/06/ucore-lab0/</url>
+    <content><![CDATA[<h1 id="ucore启动过程"><a href="#ucore启动过程" class="headerlink" title="ucore启动过程"></a>ucore启动过程</h1><h2 id="1-从复位代码处开始执行"><a href="#1-从复位代码处开始执行" class="headerlink" title="1.从复位代码处开始执行"></a>1.从复位代码处开始执行</h2><span id="more"></span>
+<ul>
+<li>主板上电后，首先执行复位代码。在QEMU模拟的这款risc-v处理器中，将复位向量地址初始化为0x1000，再将PC初始化为该复位地址，因此处理器将从此处开始执行复位代码，复位代码主要是将计算机系统的各个组件（包括处理器、内存、设备等）置于初始状态，并且会启动Bootloader，0x80000000是链接的起始位置，Bootloader将加载操作系统内核并启动操作系统的执行（但在我们的lab0中操作系统内核已经被qemu加载到指定地址）。<img src="/2023/10/06/ucore-lab0/bootloader.png" alt="1"></li>
+<li>完成计算机系统各个组件初始化后，准备跳转到bootloader（OpenSBI固件）处执行，此时t0寄存器存储的即为bootloader入口地址<img src="/bootloader%20and%20r.png" alt="2"></li>
+<li>以上复位寄存器处代码存储在<code>~/qemu-3.1.0/hw/riscv/spike.c</code>中（qemu-3.1.0由命名确定）</li>
+<li><code>0x100c:	ld	t0,24(t0)</code>在t0初始化为0x1000后，t0+24可以访问到地址0x1018，而这个地址在加载初期就已经初始化为0x80000000，所以即使在0x1018位置显示的是unimp，执行<code>0x1010:	jr	t0</code>依旧可以跳转到地址0x80000000。<img src="/2023/10/06/ucore-lab0/0x1018.png" alt="13"></li>
+</ul>
+<h2 id="2-OpenSBI"><a href="#2-OpenSBI" class="headerlink" title="2.OpenSBI"></a>2.OpenSBI</h2><p>代码跳转到0x80000000处后控制权转交给OpenSBI，此时OpenSBI要经历以下几个阶段</p>
+<h3 id="底层初始化阶段"><a href="#底层初始化阶段" class="headerlink" title="底层初始化阶段"></a>底层初始化阶段</h3><ul>
+<li><p><strong>判断hard id</strong>：取启动处理器的 ID，并将其保存到寄存器 a6 中，然后检查该处理器是否为启动处理器，如果不是则跳转到等待重定位完成的循环中，否则执行接下来的步骤。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">0x80000000      csrr   a6,mhartid</span><br><span class="line">0x80000008      auipc  t0,0x0</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>代码重定位</strong>：如果未成功获取启动处理器 ID 或者获取到的处理器 ID 不是当前处理器，则执行随机选择重定位目标地址的过程，即尝试从 <code>_relocate_lottery</code> 标签处开始循环等待。根据 <code>_link_start</code> 和 <code>_link_end</code> 标签获取链接地址， <code>_load_start</code> 标签获取加载地址，并判断二者是否相同。如果不同，则需要进行重定位操作。在我们的ucore中通过gdb追踪代码如下：<br><img src="/2023/10/06/ucore-lab0/%E4%BB%A3%E7%A0%811.png" alt="3"></p>
+</li>
+<li><p><strong>清除寄存器值</strong>：在完成代码重定位后，我们需要清除寄存器值，继续使用gdb追踪代码如下：</p>
+<p><img src="/2023/10/06/ucore-lab0/%E6%B8%85%E7%A9%BA%E5%AF%84%E5%AD%98%E5%99%A8.png" alt="15">&nbsp;</p>
+<blockquote>
+<p>调用0x80000550处函数进行寄存器初始化</p>
+</blockquote>
+<p><img src="/2023/10/06/ucore-lab0/0x80000550.png" alt="14"></p>
+</li>
+<li><p><strong>清除bss段</strong>：如果要想c语言执行起来，必须要做的事情有两个，一个是设置sp栈地址，另外就是清除bss段。<br><img src="/2023/10/06/ucore-lab0/%E4%BB%A3%E7%A0%812.png" alt="4"></p>
+</li>
+<li><p><strong>准备 scratch 空间</strong>：从地址0x800001b8开始我们进行初始化<code>struct sbi_scratch</code> 结构体，这个结构体将会传递给 <code>sbi_init()</code> 函数。（篇幅原因仅列出部分代码）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"> _scratch_init:</span><br><span class="line">/*</span><br><span class="line"></span><br><span class="line">+ The following registers hold values that are computed before</span><br><span class="line">+ entering this block, and should remain unchanged.</span><br><span class="line">*</span><br><span class="line">+ t3 -&gt; the firmware end address</span><br><span class="line">+ s7 -&gt; HART count</span><br><span class="line">+ s8 -&gt; HART stack size</span><br><span class="line">+ s9 -&gt; Heap Size</span><br><span class="line">+ s10 -&gt; Heap Offset</span><br><span class="line">*/</span><br><span class="line">add tp, t3, zero</span><br><span class="line">sub tp, tp, s9</span><br><span class="line">mul a5, s8, t1</span><br><span class="line">sub tp, tp, a5</span><br><span class="line">li a5, SBI_SCRATCH_SIZE</span><br><span class="line">sub tp, tp, a5</span><br><span class="line"></span><br><span class="line">/*Initialize scratch space*/</span><br><span class="line">/*Store fw_start and fw_size in scratch space*/</span><br><span class="line">lla a4, _fw_start</span><br><span class="line">sub a5, t3, a4</span><br><span class="line">REG_S a4, SBI_SCRATCH_FW_START_OFFSET(tp)</span><br><span class="line">REG_S a5, SBI_SCRATCH_FW_SIZE_OFFSET(tp)</span><br><span class="line"></span><br><span class="line">/*Store R/W section&#x27;s offset in scratch space*/</span><br><span class="line">lla a5, _fw_rw_start</span><br><span class="line">sub a5, a5, a4</span><br><span class="line">REG_S a5, SBI_SCRATCH_FW_RW_OFFSET(tp)</span><br><span class="line"></span><br><span class="line">/*Store fw_heap_offset and fw_heap_size in scratch space*/</span><br><span class="line">REG_S s10, SBI_SCRATCH_FW_HEAP_OFFSET(tp)</span><br><span class="line">REG_S s9, SBI_SCRATCH_FW_HEAP_SIZE_OFFSET(tp)</span><br><span class="line"></span><br><span class="line">/*Store next arg1 in scratch space*/</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line">call fw_next_arg1</span><br><span class="line">REG_S a0, SBI_SCRATCH_NEXT_ARG1_OFFSET(tp)</span><br><span class="line">MOV_3R a0, s0, a1, s1, a2, s2</span><br><span class="line">/*Store next address in scratch space*/</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line">call fw_next_addr</span><br><span class="line">REG_S a0, SBI_SCRATCH_NEXT_ADDR_OFFSET(tp)</span><br><span class="line">MOV_3R a0, s0, a1, s1, a2, s2</span><br><span class="line">/*Store next mode in scratch space*/</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line">call fw_next_mode</span><br><span class="line">REG_S a0, SBI_SCRATCH_NEXT_MODE_OFFSET(tp)</span><br><span class="line">MOV_3R a0, s0, a1, s1, a2, s2</span><br><span class="line">/*Store warm_boot address in scratch space*/</span><br><span class="line">lla a4, _start_warm</span><br><span class="line">REG_S a4, SBI_SCRATCH_WARMBOOT_ADDR_OFFSET(tp)</span><br><span class="line">/* Store platform address in scratch space */</span><br><span class="line">lla a4, platform</span><br><span class="line">REG_S a4, SBI_SCRATCH_PLATFORM_ADDR_OFFSET(tp)</span><br><span class="line">/* Store hartid-to-scratch function address in scratch space */</span><br><span class="line">lla a4,_hartid_to_scratch</span><br><span class="line">REG_S a4, SBI_SCRATCH_HARTID_TO_SCRATCH_OFFSET(tp)</span><br><span class="line">/*Store trap-exit function address in scratch space*/</span><br><span class="line">lla a4, _trap_exit</span><br><span class="line">REG_S a4, SBI_SCRATCH_TRAP_EXIT_OFFSET(tp)</span><br><span class="line">/* Clear tmp0 in scratch space */</span><br><span class="line">REG_S zero, SBI_SCRATCH_TMP0_OFFSET(tp)</span><br><span class="line">/* Store firmware options in scratch space */</span><br><span class="line">MOV_3R s0, a0, s1, a1, s2, a2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>读取设备树（Flattend Device Tree, FDT）</strong>：首先，通过前一个启动阶段传递过来的参数 a0、a1 和 a2，保存了当前 FDT 的源地址指针。接着，通过调用函数 fw_next_arg1()获取下一个启动阶段传递过来的参数 a1，即将被重定位到的 FDT 的目标地址指针。如果 a1 为 0 或者 a1 等于当前 FDT 的源地址指针，则说明不需要进行重定位，直接跳转到_fdt_reloc_done 标签处。如果需要进行重定位，则需要计算出源 FDT 的大小，并将其从源地址拷贝到目标地址，完成重定位。具体操作如下：</p>
+<ol>
+<li>首先，将目标地址按照指针大小对齐，并保存为 t1。</li>
+<li>然后，从源地址中读取 FDT 大小，该大小为大端格式，需要将其拆分为四个字节：bit[31:24]、bit[23:16]、bit[15:8]和 bit[7:0]，并组合成小端格式，保存在 t2 寄存器中。</li>
+<li>接着，将 t1 加上 t2，得到目标 FDT 的结束地址，保存在 t2 寄存器中。这样就确定了拷贝数据的范围。</li>
+<li>最后，循环拷贝数据，将源 FDT 中的数据拷贝到目标 FDT 中。循环次数为源 FDT 大小除以指针大小，即源 FDT 中包含的指针数量。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">_fdt_reloc_again:</span><br><span class="line">REG_L t3, 0(t0)</span><br><span class="line">REG_S t3, 0(t1)</span><br><span class="line">add t0, t0, **SIZEOF_POINTER**</span><br><span class="line">add t1, t1, **SIZEOF_POINTER**</span><br><span class="line">blt t1, t2,_fdt_reloc_again</span><br><span class="line">_fdt_reloc_done:</span><br><span class="line"></span><br><span class="line">/*mark boot hart done*/</span><br><span class="line">li t0, BOOT_STATUS_BOOT_HART_DONE</span><br><span class="line">lla t1, _boot_status</span><br><span class="line">REG_S t0, 0(t1)</span><br><span class="line">fence rw, rw</span><br><span class="line">j _start_warm</span><br><span class="line"> </span><br></pre></td></tr></table></figure>
+
+<p> 完成拷贝后，将 BOOT_STATUS_BOOT_HART_DONE 保存到_boot_status 寄存器中，表示当前处理器已经完成启动。最后，通过调用_start_warm 跳转到下一步操作。</p>
+</li>
+<li><p><strong>_start_warm</strong>：在初始化过程中，需要禁用和清除所有中断，并设置当前处理器的栈指针和 <code>trap handler</code>（异常处理函数）。使用gdb具体追踪，代码如下：</p>
+<p><img src="/2023/10/06/ucore-lab0/0x8000039e.png" alt="16"></p>
+<p> 具体执行过程如下：</p>
+<ol>
+<li>首先，调用<code>_reset_regs</code>函数，将寄存器状态重置为 0，以保证非引导处理器使用前的状态干净、一致。</li>
+<li>接着，禁用和清空所有中断，即将 CSR_MIE 和 CSR_MIP 寄存器都设置为 0。</li>
+<li>获取 platform 变量的地址，并读取平台配置信息，包括处理器数量（s7）和每个处理器的栈大小（s8）。</li>
+<li>获取当前处理器的 ID（s6），并判断其是否超出了处理器数量的范围。如果超出，则跳转到_start_hang 标签，表示出现了错误。</li>
+<li>计算当前处理器对应的 scratch space 的地址，并将其保存到 CSR_MSCRATCH 寄存器中，作为 SBI 运行时的全局变量。</li>
+<li>将 scratch space 地址保存到 SP 寄存器中，作为当前处理器的栈指针。</li>
+<li>设置 trap handler 为<code>_trap_handler</code>函数，即当发生异常时会跳转到该函数进行处理。同时，读取 MTVEC 寄存器的值确保 trap handler 已经设置成功。</li>
+<li>调用<code>sbi_init</code>函数进行 SBI 运行时的初始化。<code>sbi_init</code>函数将会初始化各种全局变量、锁、Hart Table 等</li>
+</ol>
+<p>  <img src="/2023/10/06/ucore-lab0/init.png" alt="5"></p>
+<ol start="9">
+<li>最后，通过跳转到_start_hang 标签等待处理器发生异常或被重置。</li>
+</ol>
+</li>
+<li><p><strong>跳转至设备初始化</strong><br>在一系列的初始化之后，需要进行跳转进行内核的加载。此时，可以分析一下程序是在哪里进行跳转的。<br>首先猜想是直接通过地址跳转，所以将0x8000000开始的代码进行检查。以下为部分代码：</p>
+<p><img src="/2023/10/06/ucore-lab0/0x80008762.png" alt="9"></p>
+<p>在文档内直接搜索，可以发现代码中并没有直接跳转至0x80200000，于是推测是通过寄存器进行跳转。</p>
+<p><img src="/2023/10/06/ucore-lab0/4.%E6%90%9C%E7%B4%A2%E6%97%A0%E7%BB%93%E6%9E%9C.png" alt="10"></p>
+<p>在刚进入gdb后，在0x80200000地址处进行断点，然后直接continue</p>
+<p><img src="/1.%E6%89%93%E6%96%AD%E7%82%B9%20%E8%B7%B3%E8%BD%AC.png" alt="7"></p>
+<p>在跳转后可以发现，下一步就是<kern_entry></p>
+<p><img src="/2023/10/06/ucore-lab0/2.%E5%86%85%E6%A0%B8%E5%8A%A0%E8%BD%BD.png" alt="8"></p>
+<p>通过<code>info r</code>，查看此时的寄存器存储情况</p>
+<p><img src="/2023/10/06/ucore-lab0/5.%E5%AF%84%E5%AD%98%E5%99%A8%E6%83%85%E5%86%B5.png" alt="11"></p>
+<p>观察可以发现，寄存器t0、a2、a7存储的值为0x80200000<br>返回代码处进行搜索回溯，再配合在gdb的多次调试，最终发现是在运行完0x80005036后跳转到了0x80200000</p>
+<p><img src="/2023/10/06/ucore-lab0/6.%E8%B7%B3%E8%BD%AC.png" alt="12"></p>
+</li>
+</ul>
+<h3 id="OpenSBI设备初始化"><a href="#OpenSBI设备初始化" class="headerlink" title="OpenSBI设备初始化"></a><strong>OpenSBI设备初始化</strong></h3><p>  在前面的过程中opensbi已经基本启动完成，接下来主要进行设备初始化，然后将控制权交给操作系统内核</p>
+<p>  <img src="/2023/10/06/ucore-lab0/opensbi.png" alt="6"></p>
+<h1 id="操作系统知识点与原理"><a href="#操作系统知识点与原理" class="headerlink" title="操作系统知识点与原理"></a>操作系统知识点与原理</h1><ul>
+<li>使用链接脚本描述内存布局</li>
+<li>使用编译工具交叉编译内核，进而生成内核映像</li>
+<li>使用opensbi作为bootloader<ul>
+<li>对应操作系统知识:在计算机启动时，需要先运行一段固化在计算机主板上的程序完成上电和加载操作系统的程序即bootloader</li>
+</ul>
+</li>
+<li>使用 OpenSBI 提供的服务，在屏幕上格式化打印字符串</li>
+<li>使用gdb调试程序</li>
+</ul>
+<h1 id="该实验未涉及的知识点"><a href="#该实验未涉及的知识点" class="headerlink" title="该实验未涉及的知识点"></a>该实验未涉及的知识点</h1><ul>
+<li>sbi是一种riscv架构中用于操作系统（OS）和硬件监管程序（Hypervisor）之间的标准接口。 它定义了一组指令和数据结构，以使OS和Hypervisor能够共同使用处理器和其他硬件资源。</li>
+<li>riscv特权等级</li>
+</ul>
+]]></content>
+      <categories>
+        <category>ucore</category>
+      </categories>
+      <tags>
+        <tag>小楼昨夜又东风_os</tag>
       </tags>
   </entry>
   <entry>
@@ -38,6 +184,106 @@
       </categories>
       <tags>
         <tag>小楼昨夜又东风_os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一式_计算机网络概述</title>
+    <url>/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/</url>
+    <content><![CDATA[<p><code>1.互联网是网络的网络</code></p>
+<span id="more"></span>
+<p><code>2.几种类型的接入网:</code></p>
+<ul>
+<li>家庭接入：DSL（数字电话线）、电缆、光纤</li>
+<li>企业：以太网、wifi</li>
+<li>广域无线接入：4G、卫星</li>
+</ul>
+<p><code>3.物理媒体</code></p>
+<ul>
+<li>导引型媒体：双绞铜线、同轴电缆、光纤</li>
+<li>非导引型媒体：陆地无线电信道、卫星无线电信道</li>
+</ul>
+<p><code>4.网络协议层次</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/%E5%8D%8F%E8%AE%AE.png"></p>
+<p><code>5.通过网络交换数据有两种方法：分组交换和电路交换（时分复用|频分复用）</code></p>
+]]></content>
+      <categories>
+        <category>逍遥独步剑_计算机网络自顶向下</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第三式_虚拟内存</title>
+    <url>/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/</url>
+    <content><![CDATA[<p><code>1.虚拟内存技术不仅可以对计算机主存进行抽象，还可以为每个程序提供独立的地址空间，使同时运行的程序互不干扰</code></p>
+<span id="more"></span>
+<p><code>2.mmu将虚拟地址转换为物理地址，转换流程如下：</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E6%B5%81%E7%A8%8B.png"></p>
+<p><code>3.将虚拟地址映射为物理地址，需要访问存储器，引入tlb可以加快速度!</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/tlb.png"></p>
+<p><code>4.有时候在内存中保存page tables会占用大量内存，此时可以用以下方法解决：</code></p>
+<ul>
+<li><p>多级页表</p>
+</li>
+<li><p>倒排页表<br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E5%80%92%E6%8E%92.png"></p>
+</li>
+<li><p>为了解决倒排页表搜索速度很慢的困境，还可以使用hash表</p>
+</li>
+</ul>
+<p><code>5.常用的页面置换算法</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E7%BD%AE%E6%8D%A2.png"></p>
+<p><code>分段与分页机制相结合的两个实例：</code></p>
+<ul>
+<li><p>MULTICS:</p>
+<ul>
+<li>MULTICS的段描述符:<br><img src="/%E6%AE%B5%E6%8F%8F%E8%BF%B0.png"></li>
+<li>MULTICS进行内存访问时的过程:<br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E8%BF%87%E7%A8%8B.png"><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E8%BF%87%E7%A8%8B2.png"></li>
+</ul>
+</li>
+<li><p>intel 奔腾：</p>
+<ul>
+<li><p><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/gc2.png"></p>
+</li>
+<li><p>奔腾访问内存过程：</p>
+<ul>
+<li><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/gc.png"></li>
+<li><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E5%A5%94%E8%85%BE.png"></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>7.在mit 6.s081中提到过的在页目录项的地址低12位为0，且每次操作系统申请内存都为4k</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/4.png"></p>
+]]></content>
+      <categories>
+        <category>相夷太剑</category>
+      </categories>
+      <tags>
+        <tag>小楼昨夜又东风_os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第二式_应用层</title>
+    <url>/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E5%BA%94%E7%94%A8%E5%B1%82/</url>
+    <content><![CDATA[<p><code>1.IP协议是网络协议的核心，但它并不提供可靠服务，主要有以下几点原因：</code></p>
+<span id="more"></span>
+<ul>
+<li>解耦合：IP协议作为互联网的核心，具有独一无二的地位。但并非所有应用都需要可靠服务，对于这部分应用，我们更希望在应用中或更上层协议中提供可靠服务（end-to-end principle）</li>
+<li>成本原因：我们当然希望IP能提供可靠服务，但对于那些不必要保证可靠性的应用来说，这显然增加了成本，而且扩展性也不好</li>
+<li>因此对于核心协议IP我们尽可能使它简单但有效</li>
+</ul>
+<p><code>2.IP提供的服务：</code></p>
+<ul>
+<li>防止数据包在网络中死循环</li>
+<li>如果数据报太长，超出了链路层帧，IP层会将它切分成更小的部分</li>
+<li>使用检验和提供检查是否出错的功能</li>
+<li>与最新ipv6协议具有兼容能力</li>
+<li>允许往ip数据报头部添加额外信息</li>
+</ul>
+<p><code>3.ip数据报格式</code><br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E5%BA%94%E7%94%A8%E5%B1%82/%E6%A0%BC%E5%BC%8F.png"></p>
+]]></content>
+      <categories>
+        <category>逍遥独步剑_计算机网络自顶向下</category>
+      </categories>
+      <tags>
+        <tag>计算机网络</tag>
       </tags>
   </entry>
   <entry>

@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>第二式_进程和线程 |  岛</title>
+      <title>第三式_虚拟内存 |  岛</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -54,7 +54,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-第二式-进程和线程"
+  id="post-第三式-虚拟内存"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -65,7 +65,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  第二式_进程和线程
+  第三式_虚拟内存
 </h1>
  
 
@@ -73,8 +73,8 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" class="article-date">
-  <time datetime="2023-10-06T04:32:04.000Z" itemprop="datePublished">2023-10-06</time>
+      <a href="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="article-date">
+  <time datetime="2023-10-06T05:04:41.000Z" itemprop="datePublished">2023-10-06</time>
 </a> 
   <div class="article-category">
     <a class="article-category-link" href="/categories/%E7%9B%B8%E5%A4%B7%E5%A4%AA%E5%89%91/">相夷太剑</a>
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">569</span>
+            <span class="post-count">250</span>
         </span>
     </span>
 
@@ -107,38 +107,42 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p><code>1. 操作系统为了更好的管理硬件资源，应用了很多抽象的概念</code></p>
+  <p><code>1.虚拟内存技术不仅可以对计算机主存进行抽象，还可以为每个程序提供独立的地址空间，使同时运行的程序互不干扰</code></p>
+<span id="more"></span>
+<p><code>2.mmu将虚拟地址转换为物理地址，转换流程如下：</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E6%B5%81%E7%A8%8B.png"></p>
+<p><code>3.将虚拟地址映射为物理地址，需要访问存储器，引入tlb可以加快速度!</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/tlb.png"></p>
+<p><code>4.有时候在内存中保存page tables会占用大量内存，此时可以用以下方法解决：</code></p>
 <ul>
-<li>进程、线程是对cpu资源的抽象</li>
-<li>文件系统是对磁盘的抽象<span id="more"></span>
-<code>2.典型进程表中的一些字段</code></li>
-</ul>
-<p><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E8%BF%9B%E7%A8%8B%E8%A1%A8.png" alt="进程表"></p>
-<p><code>3.进程切换发生中断时一般会经历以下情况</code></p>
-<p><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2.png" alt="进程切换"></p>
-<p><code>4.进程间需要通信（IPC)，但正如在并行中学到的一样，进程间通信会产生一些竞争条件，临界区， 解决进程间通信导致的不一致问题，常有以下几种方法：</code></p>
-<ul>
-<li><p>忙等待互斥</p>
-<ul>
-<li>对于单核cpu，可以使用屏蔽中断，一旦一个进程屏蔽中断以后，它就可以检查和修改内存，而不必担心其他进程介入，但对于现在处理器多核cpu的发展趋势，这个方法并不适用</li>
-<li>尝试一种软件的解决方法，使用锁变量，但会产生和假脱机目录一样的问题</li>
-<li>严格轮换法<br> <img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E4%B8%A5%E6%A0%BC%E8%BD%AE%E6%8D%A2%E6%B3%95.png" alt="严格轮换法"></li>
-<li>Peterson的解法：将锁变量与警告变量相结合，最早提出了不需要严格轮换的软件互斥算法<br> <img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/peterson.png"></li>
-<li>TSL指令：需要一种硬件支持的方法<img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/tsl.png"></li>
-<li>在x86中可以用xchag指令代替tsl指令<img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/xchg.png"></li>
-</ul>
+<li><p>多级页表</p>
 </li>
-<li><p>睡眠与唤醒：上述方法都有忙等待的缺点，会浪费cpu时间，甚至在某些具有进程优先级的系统中甚至会产生意料不到的效果，以生产者、消费者问题为例子!<br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E7%9D%A1%E7%9C%A0.png" alt="睡眠与唤醒"></p>
+<li><p>倒排页表<br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E5%80%92%E6%8E%92.png"></p>
 </li>
-<li><p>信号量：在睡眠与唤醒的方法中，可能存在信号丢失的问题，因此可以采用信号量的方法<br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E4%BF%A1%E5%8F%B7%E9%87%8F.png" alt="信号量"></p>
-</li>
-<li><p>互斥量：如果不需要信号量的计数能力，可以采用简易版的信号量-互斥量<br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E4%BA%92%E6%96%A5%E9%87%8F.png" alt="互斥量"></p>
-</li>
-<li><p>线程间还可以用消息交流，使用屏障的方法同步<br><code>5.进程间通信通常需要满足以下几个条件</code><br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E6%9D%A1%E4%BB%B6.png"></p>
+<li><p>为了解决倒排页表搜索速度很慢的困境，还可以使用hash表</p>
 </li>
 </ul>
-<p><code>6.进程间状态的变换：进程的状态来自内存变量，处理器的状态来自寄存器，在内存中的变量不被破坏的情况下，只需保存和恢复程序执行过程的寄存器就可以了</code></p>
-<p><code>7.一个进程有一个内核空间栈和一个用户空间栈</code></p>
+<p><code>5.常用的页面置换算法</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E7%BD%AE%E6%8D%A2.png"></p>
+<p><code>分段与分页机制相结合的两个实例：</code></p>
+<ul>
+<li><p>MULTICS:</p>
+<ul>
+<li>MULTICS的段描述符:<br><img src="/%E6%AE%B5%E6%8F%8F%E8%BF%B0.png"></li>
+<li>MULTICS进行内存访问时的过程:<br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E8%BF%87%E7%A8%8B.png"><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E8%BF%87%E7%A8%8B2.png"></li>
+</ul>
+</li>
+<li><p>intel 奔腾：</p>
+<ul>
+<li><p><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/gc2.png"></p>
+</li>
+<li><p>奔腾访问内存过程：</p>
+<ul>
+<li><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/gc.png"></li>
+<li><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/%E5%A5%94%E8%85%BE.png"></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><code>7.在mit 6.s081中提到过的在页目录项的地址低12位为0，且每次操作系统申请内存都为4k</code><br><img src="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/4.png"></p>
  
       <!-- reward -->
       
@@ -191,7 +195,7 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -204,19 +208,19 @@
    
   <nav class="article-nav">
     
-      <a href="/2023/10/06/%E7%AC%AC%E4%B8%89%E5%BC%8F-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98/" class="article-nav-link">
+      <a href="/2023/10/06/ucore-lab0/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            第三式_虚拟内存
+            ucore_lab0
           
         </div>
       </a>
     
     
-      <a href="/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" class="article-nav-link">
+      <a href="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">第一式_操作系统概念</div>
+        <div class="article-nav-title">第二式_进程和线程</div>
       </a>
     
   </nav>

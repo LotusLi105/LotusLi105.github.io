@@ -11,7 +11,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1"
       />
-      <title>Hello World |  岛</title>
+      <title>uco_lab1 |  岛</title>
   <meta name="generator" content="hexo-theme-ayer">
       
       <link rel="shortcut icon" href="/favicon.ico" />
@@ -54,7 +54,7 @@
     <main class="content on">
       <section class="outer">
   <article
-  id="post-hello-world"
+  id="post-uco-lab1"
   class="article article-type-post"
   itemscope
   itemprop="blogPost"
@@ -65,7 +65,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Hello World
+  uco_lab1
 </h1>
  
 
@@ -73,11 +73,11 @@
     </header>
      
     <div class="article-meta">
-      <a href="/2022/10/06/hello-world/" class="article-date">
-  <time datetime="2022-10-05T16:00:00.000Z" itemprop="datePublished">2022-10-06</time>
+      <a href="/2023/10/06/uco-lab1/" class="article-date">
+  <time datetime="2023-10-06T05:58:51.000Z" itemprop="datePublished">2023-10-06</time>
 </a> 
   <div class="article-category">
-    <a class="article-category-link" href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+    <a class="article-category-link" href="/categories/ucore/">ucore</a>
   </div>
   
 <div class="word_count">
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> 字数统计:</span>
-            <span class="post-count">75</span>
+            <span class="post-count">1.8k</span>
         </span>
     </span>
 
@@ -94,7 +94,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> 阅读时长≈</span>
-            <span class="post-count">1 分钟</span>
+            <span class="post-count">6 分钟</span>
         </span>
     </span>
 </div>
@@ -109,19 +109,69 @@
   
     <div class="article-entry" itemprop="articleBody">
        
-  <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<span id="more"></span>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+  <h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><span id="more"></span>
+<h2 id="练习1"><a href="#练习1" class="headerlink" title="练习1"></a>练习1</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;mmu.h&gt;</span><br><span class="line">#include &lt;memlayout.h&gt;</span><br><span class="line"></span><br><span class="line">    .section .text,&quot;ax&quot;,%progbits</span><br><span class="line">    .globl kern_entry</span><br><span class="line">kern_entry:</span><br><span class="line">    la sp, bootstacktop</span><br><span class="line"></span><br><span class="line">    tail kern_init</span><br><span class="line"></span><br><span class="line">.section .data</span><br><span class="line">    # .align 2^12</span><br><span class="line">    .align PGSHIFT</span><br><span class="line">    .global bootstack</span><br><span class="line">bootstack:</span><br><span class="line">    .space KSTACKSIZE</span><br><span class="line">    .global bootstacktop</span><br><span class="line">bootstacktop:</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>la sp, bootstacktop完成了将bootstacktop标签处的地址值赋给sp的操作，该汇编语句的作用是初始化操作系统内核栈</p>
+</li>
+<li><p>tail kern_init用于实现函数调用，这是一种特殊的函数调用，称为尾调用（tail call）。尾调用是一种优化技术，它在调用一个函数之后，不需要在返回时执行额外的操作，而是直接跳转到被调用函数的入口点，这有助于减少栈空间的使用，同时可以确保内核不会返回到引导加载程序或操作系统之外。该语句用于将控制权转移给真正的入口点kern_init。</p>
+</li>
+</ol>
+<h2 id="练习2"><a href="#练习2" class="headerlink" title="练习2"></a>练习2</h2><p>1.实现过程：</p>
+<ul>
+<li>在init.c中初始化时钟中断clock_init();</li>
+<li>在trap.c中首先设置下次时钟中断- clock_set_next_event()</li>
+<li>计数器（ticks）加一</li>
+<li>当计数器加到100的时候，我们会输出一个<code>100ticks</code>表示我们触发了100次时钟中断，同时打印次数（num）加一</li>
+<li>判断打印次数，当打印次数为10时，调用&lt;sbi.h&gt;中的关机函数关机</li>
+</ul>
+<p>2.中断处理流程：</p>
+<ul>
+<li>在init.c中初始化时钟中断clock_init();</li>
+<li>触发时钟中断后，stvec寄存器中保存了中断异常处理函数的入口地址</li>
+<li>在trapentry.S中保存寄存器值，然后将控制权交给真正处理函数入口点</li>
+<li>在trap.c中根据中断异常处理类型调用相关函数进行处理</li>
+</ul>
+<h3 id="challenge1"><a href="#challenge1" class="headerlink" title="challenge1"></a>challenge1</h3><ol>
+<li><p>ucore中断异常的处理流程：当时钟中断产生时，操作系统会保存pc中触发中断异常的指令地址，同时将pc值设为stvec寄存器的值（中断处理程序的入口点），跳转到<code>kern/trap/trapentry.S</code>的<code>__alltraps</code>标记，保存当前执行流的上下文，并通过函数调用，切换为<code>kern/trap/trap.c</code>的中断处理函数<code>trap()</code>的上下文，进入<code>trap()</code>的执行流。<br>切换前的上下文作为一个结构体，传递给<code>trap()</code>作为函数参数 -&gt; <code>kern/trap/trap.c</code>按照中断类型进行分发(<code>trap_dispatch(), interrupt_handler()</code>)-&gt;执行时钟中断对应的处理语句，累加计数器，设置下一次时钟中断-&gt;完成处理，返回到<code>kern/trap/trapentry.S</code>-&gt;恢复原先的上下文，中断处理结束。</p>
+<br>
+</li>
+<li><p>mov a0，sp的目的：该语句其实是在为下面这条汇编调用c函数的汇编语句jal trap，准备执行环境，a0寄存器在riscv体系结构中是用来传递函数调用参数的，将sp值赋给a0，其实就是将保存切换前的上下文的栈地址传递给函数void trap(struct trapframe *tf) { trap_dispatch(tf);}，将栈指针的值传递给异常处理程序，以便它可以访问当前的栈帧和栈上的数据。</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">__alltraps:</span><br><span class="line">   SAVE_ALL</span><br><span class="line"></span><br><span class="line">   move  a0, sp</span><br><span class="line">   jal trap</span><br><span class="line">   # sp should be the same as before &quot;jal trap&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>SAVE_ALL中寄寄存器保存在栈中的位置由当前栈顶指针sp确定</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">addi sp, sp, -36 * REGBYTES</span><br><span class="line"># save x registers</span><br><span class="line">STORE x0, 0*REGBYTES(sp)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>不需要，保存寄存器的需求取决于中断的类型和处理程序的具体需求，不同类型的中断可能需要保存不同的寄存器，保存和恢复所有寄存器可能会引入额外的开销，包括内存访问和指令执行。如果中断处理程序可以在不保存所有寄存器的情况下正常工作，那么可以减小中断处理的开销，提高性能。一般来说，中断和异常可以分为两种类型：可屏蔽中断（Maskable Interrupts）和非可屏蔽中断和异常（Non-Maskable Interrupts and Exceptions）。对于可屏蔽中断，可以选择在进入中断处理程序之前保存和恢复一部分寄存器，而不是所有寄存器。对于非可屏蔽中断和异常，通常会保存所有寄存器，因为无法信任中断处理程序的行为，需要确保所有寄存器状态都能够被完全恢复。</p>
+</li>
+</ol>
+<h3 id="challenge2"><a href="#challenge2" class="headerlink" title="challenge2"></a>challenge2</h3><ol>
+<li><p>csrw sscratch, sp；csrrw s0, sscratch, x0实现了什么操作：csrw sscratch, sp将sp寄存器中的值赋给sscratch，csrrw s0, sscratch, x0将sscratch的当前值写入目标寄存器<code>s0</code>，并将CSR <code>sscratch</code> 的值设置为零。<br>目的：保存之前写到sscratch里的sp的值</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">     .macro SAVE_ALL</span><br><span class="line"></span><br><span class="line">    csrw sscratch, sp</span><br><span class="line"></span><br><span class="line">    addi sp, sp, -36 * REGBYTES</span><br><span class="line">    ......</span><br><span class="line">    # get sr, epc, badvaddr, cause</span><br><span class="line">    # Set sscratch register to 0, so that if a recursive exception</span><br><span class="line">    # occurs, the exception vector knows it came from the kernel</span><br><span class="line">    csrrw s0, sscratch, x0</span><br><span class="line">--------------------------------------------------------</span><br><span class="line">    .macro RESTORE_ALL</span><br><span class="line"></span><br><span class="line">    LOAD s1, 32*REGBYTES(sp)</span><br><span class="line">    LOAD s2, 33*REGBYTES(sp)</span><br><span class="line"></span><br><span class="line">    csrw sstatus, s1</span><br><span class="line">    csrw sepc, s2</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>这主要是因为badvaddr寄存器和cause寄存器中保存的分别是出错的地址以及出错的原因，在处理中断时可以利用这些信息，当我们处理完这个中断的时候，也就不需要这两个寄存器中保存的值，所以可以不用恢复这两个寄存器。而当由新的中断发生时，系统会自动设置这两个寄存器的值</p>
+</li>
+</ol>
+<h3 id="challenge3"><a href="#challenge3" class="headerlink" title="challenge3"></a>challenge3</h3><ol>
+<li>出现中断时，中断返回地址 mepc 的值被更新为下一条尚未执行的指令</li>
+</ol>
+<p> 出现异常时，中断返回地址 mepc 的值被更新为当前发生异常的指令 PC，在异常处理程序中软件改变 mepc 指向下一条指令，由于现在 ecall&#x2F;ebreak（或 c.ebreak）是 4（或 2）字节指令，因此改写设定 mepc&#x3D;mepc+4（或+2）即可。</p>
+<ol start="2">
+<li>代码见编程部分</li>
+</ol>
+<h1 id="操作系统知识点与原理"><a href="#操作系统知识点与原理" class="headerlink" title="操作系统知识点与原理"></a>操作系统知识点与原理</h1><ul>
+<li>riscv中断相关知识</li>
+<li>中断前后如何进行上下文环境的保存与恢复</li>
+<li>ucore如何处理最简单的断点中断和时钟中断</li>
+</ul>
+<h1 id="该实验未涉及知识点"><a href="#该实验未涉及知识点" class="headerlink" title="该实验未涉及知识点"></a>该实验未涉及知识点</h1><ul>
+<li>ucore为riscv架构，和x86有所不同。在x86架构计算机中，操作系统处理中断和异常前会先初始化idt，即中断异常处理向量表，来保存中断和异常处理对应的函数。</li>
+<li>sepc：出现中断时，中断返回地址 sepc 的值被更新为下一条尚未执行的指令地址出现异常时，中断返回地址 sepc 的值被更新为当前发生异常的指令 PC，在异常处理程序中软件改变 sepc 指向下一条指令，由于现在 ecall&#x2F;ebreak（或 c.ebreak）是 4（或 2）字节指令，因此改写设定 sepc&#x3D;sepc+4（或+2）即可。</li>
+<li>stvec：保存中断处理程序入口地址</li>
+<li>sscratch：保存用户程序栈指针sp</li>
+<li>scause：它会记录中断发生的原因，还会记录该中断是不是一个外部中断</li>
+<li>stval：它会记录一些中断处理所需要的辅助信息，比如指令获取(instruction fetch)、访存、缺页异常，它会把发生问题的目标地址或者出错的指令记录下来，这样我们在中断处理程序中就知道处理目标了。</li>
+</ul>
  
       <!-- reward -->
       
@@ -174,12 +224,12 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2022/10/06/hello-world/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=http://example.com/2023/10/06/uco-lab1/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>  
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/" rel="tag">小楼昨夜又东风_os</a></li></ul>
 
     </footer>
   </div>
@@ -187,15 +237,20 @@
    
   <nav class="article-nav">
     
-      <a href="/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/" class="article-nav-link">
+      <a href="/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            第一式_操作系统概念
+            第一式_计算机网络概述
           
         </div>
       </a>
     
+    
+      <a href="/2023/10/06/ucore-lab0/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">ucore_lab0</div>
+      </a>
     
   </nav>
 
