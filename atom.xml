@@ -1,36 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>岛</title>
+  <icon>https://www.gravatar.com/avatar/bf7341bc13cb5db0f05e85df46c16a13</icon>
   
-  <subtitle>面朝大海，春暖花开</subtitle>
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-06T02:24:41.869Z</updated>
+  <updated>2023-10-06T05:00:13.607Z</updated>
   <id>http://example.com/</id>
   
   <author>
-    <name>John Doe</name>
-    
+    <name>lxy</name>
+    <email>2112117@mail.nankai.edu.cn</email>
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第二式_进程和线程</title>
+    <link href="http://example.com/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/"/>
+    <id>http://example.com/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</id>
+    <published>2023-10-06T04:32:04.000Z</published>
+    <updated>2023-10-06T05:00:13.607Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;code&gt;1. 操作系统为了更好的管理硬件资源，应用了很多抽象的概念&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;进程、线程是对cpu资源的抽象&lt;/li&gt;
+&lt;li&gt;文件系统是对磁盘的抽象</summary>
+    
+    
+    
+    <category term="相夷太剑" scheme="http://example.com/categories/%E7%9B%B8%E5%A4%B7%E5%A4%AA%E5%89%91/"/>
+    
+    
+    <category term="小楼昨夜又东风_os" scheme="http://example.com/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>第一式_操作系统概念</title>
+    <link href="http://example.com/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/"/>
+    <id>http://example.com/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/</id>
+    <published>2023-10-06T04:22:57.000Z</published>
+    <updated>2023-10-06T04:59:35.797Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;操作系统主要有两个作用&quot;&gt;&lt;a href=&quot;#操作系统主要有两个作用&quot; class=&quot;headerlink&quot; title=&quot;操作系统主要有两个作用&quot;&gt;&lt;/a&gt;操作系统主要有两个作用&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;管理分配计算机的硬件资源，将丑陋的硬件接口优化为统一美观的接口，为应用程序开发提供便利&lt;/li&gt;
+&lt;li&gt;为应用程序员提供一个资源集的清晰抽象，提供系统调用、接口，与程序员打交道</summary>
+    
+    
+    
+    <category term="相夷太剑" scheme="http://example.com/categories/%E7%9B%B8%E5%A4%B7%E5%A4%AA%E5%89%91/"/>
+    
+    
+    <category term="小楼昨夜又东风_os" scheme="http://example.com/tags/%E5%B0%8F%E6%A5%BC%E6%98%A8%E5%A4%9C%E5%8F%88%E4%B8%9C%E9%A3%8E-os/"/>
+    
+  </entry>
   
   <entry>
     <title>Hello World</title>
     <link href="http://example.com/2022/10/06/hello-world/"/>
     <id>http://example.com/2022/10/06/hello-world/</id>
     <published>2022-10-05T16:00:00.000Z</published>
-    <updated>2023-10-06T02:24:41.869Z</updated>
+    <updated>2023-10-06T04:01:05.397Z</updated>
     
     
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
-        
-      
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a href=&quot;#Create-a-new-post&quot; class=&quot;headerlink&quot; title=&quot;Create a new post&quot;&gt;&lt;/a&gt;Create a new post&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo new &lt;span class=&quot;string&quot;&gt;&amp;quot;My New Post&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/writing.html&quot;&gt;Writing&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Run-server&quot;&gt;&lt;a href=&quot;#Run-server&quot; class=&quot;headerlink&quot; title=&quot;Run server&quot;&gt;&lt;/a&gt;Run server&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
     
     
     

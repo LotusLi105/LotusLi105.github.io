@@ -8,7 +8,7 @@
 
 <p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
+<span id="more"></span>
 <p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
 <h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
 
@@ -22,6 +22,65 @@
       </categories>
       <tags>
         <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一式_操作系统概念</title>
+    <url>/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/</url>
+    <content><![CDATA[<h1 id="操作系统主要有两个作用"><a href="#操作系统主要有两个作用" class="headerlink" title="操作系统主要有两个作用"></a>操作系统主要有两个作用</h1><ul>
+<li>管理分配计算机的硬件资源，将丑陋的硬件接口优化为统一美观的接口，为应用程序开发提供便利</li>
+<li>为应用程序员提供一个资源集的清晰抽象，提供系统调用、接口，与程序员打交道<span id="more"></span></li>
+</ul>
+<h1 id="操作系统系统调用过程"><a href="#操作系统系统调用过程" class="headerlink" title="操作系统系统调用过程"></a>操作系统系统调用过程</h1><p><img src="/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.jpg" alt="系统调用"></p>
+]]></content>
+      <categories>
+        <category>相夷太剑</category>
+      </categories>
+      <tags>
+        <tag>小楼昨夜又东风_os</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第二式_进程和线程</title>
+    <url>/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</url>
+    <content><![CDATA[<p><code>1. 操作系统为了更好的管理硬件资源，应用了很多抽象的概念</code></p>
+<ul>
+<li>进程、线程是对cpu资源的抽象</li>
+<li>文件系统是对磁盘的抽象<span id="more"></span>
+<code>2.典型进程表中的一些字段</code></li>
+</ul>
+<p><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E8%BF%9B%E7%A8%8B%E8%A1%A8.png" alt="进程表"></p>
+<p><code>3.进程切换发生中断时一般会经历以下情况</code></p>
+<p><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E8%BF%9B%E7%A8%8B%E5%88%87%E6%8D%A2.png" alt="进程切换"></p>
+<p><code>4.进程间需要通信（IPC)，但正如在并行中学到的一样，进程间通信会产生一些竞争条件，临界区， 解决进程间通信导致的不一致问题，常有以下几种方法：</code></p>
+<ul>
+<li><p>忙等待互斥</p>
+<ul>
+<li>对于单核cpu，可以使用屏蔽中断，一旦一个进程屏蔽中断以后，它就可以检查和修改内存，而不必担心其他进程介入，但对于现在处理器多核cpu的发展趋势，这个方法并不适用</li>
+<li>尝试一种软件的解决方法，使用锁变量，但会产生和假脱机目录一样的问题</li>
+<li>严格轮换法<br> <img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E4%B8%A5%E6%A0%BC%E8%BD%AE%E6%8D%A2%E6%B3%95.png" alt="严格轮换法"></li>
+<li>Peterson的解法：将锁变量与警告变量相结合，最早提出了不需要严格轮换的软件互斥算法<br> <img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/peterson.png"></li>
+<li>TSL指令：需要一种硬件支持的方法<img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/tsl.png"></li>
+<li>在x86中可以用xchag指令代替tsl指令<img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/xchg.png"></li>
+</ul>
+</li>
+<li><p>睡眠与唤醒：上述方法都有忙等待的缺点，会浪费cpu时间，甚至在某些具有进程优先级的系统中甚至会产生意料不到的效果，以生产者、消费者问题为例子!<br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E7%9D%A1%E7%9C%A0.png" alt="睡眠与唤醒"></p>
+</li>
+<li><p>信号量：在睡眠与唤醒的方法中，可能存在信号丢失的问题，因此可以采用信号量的方法<br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E4%BF%A1%E5%8F%B7%E9%87%8F.png" alt="信号量"></p>
+</li>
+<li><p>互斥量：如果不需要信号量的计数能力，可以采用简易版的信号量-互斥量<br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E4%BA%92%E6%96%A5%E9%87%8F.png" alt="互斥量"></p>
+</li>
+<li><p>线程间还可以用消息交流，使用屏障的方法同步<br><code>5.进程间通信通常需要满足以下几个条件</code><br><img src="/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/%E6%9D%A1%E4%BB%B6.png"></p>
+</li>
+</ul>
+<p><code>6.进程间状态的变换：进程的状态来自内存变量，处理器的状态来自寄存器，在内存中的变量不被破坏的情况下，只需保存和恢复程序执行过程的寄存器就可以了</code></p>
+<p><code>7.一个进程有一个内核空间栈和一个用户空间栈</code></p>
+]]></content>
+      <categories>
+        <category>相夷太剑</category>
+      </categories>
+      <tags>
+        <tag>小楼昨夜又东风_os</tag>
       </tags>
   </entry>
 </search>
