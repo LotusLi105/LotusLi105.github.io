@@ -171,6 +171,40 @@
       </tags>
   </entry>
   <entry>
+    <title>竹隐篇</title>
+    <url>/2023/10/15/%E7%AB%B9%E5%BD%B1%E7%AF%87/</url>
+    <content><![CDATA[<h2 id="癸卯年壬戌月庚子日——癸卯年壬戌月丙午日"><a href="#癸卯年壬戌月庚子日——癸卯年壬戌月丙午日" class="headerlink" title="癸卯年壬戌月庚子日——癸卯年壬戌月丙午日"></a>癸卯年壬戌月庚子日——癸卯年壬戌月丙午日</h2><blockquote>
+<p>2023&#x2F;10&#x2F;09——2023&#x2F;10&#x2F;15</p>
+</blockquote>
+<ul>
+<li>这周的主要任务是完成ucore实验，其中在lab5用户进程中由于在进程链表初始化时，重复初始化导致进程调度死循环</li>
+<li>另外还学习了cs143编译原理课程</li>
+<li>完成计网实验lab1和检查工作<blockquote>
+<p>下周预计完成任务:</p>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>1.完成计算机体系结构lab2</p>
+</blockquote>
+<blockquote>
+<p>2.看计算机体系结构对应网课</p>
+</blockquote>
+<blockquote>
+<p>3.完成编译原理实验并完成cs143网课</p>
+</blockquote>
+<blockquote>
+<p>4.完成ucore实验基础部分</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>扬州慢</category>
+      </categories>
+      <tags>
+        <tag>学习周报</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第一式_操作系统概念</title>
     <url>/2023/10/06/%E7%AC%AC%E4%B8%80%E5%BC%8F-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E6%A6%82%E5%BF%B5/</url>
     <content><![CDATA[<h1 id="操作系统主要有两个作用"><a href="#操作系统主要有两个作用" class="headerlink" title="操作系统主要有两个作用"></a>操作系统主要有两个作用</h1><ul>

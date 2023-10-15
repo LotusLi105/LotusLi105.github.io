@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>岛</title>
+  <title>山外</title>
   <icon>https://www.gravatar.com/avatar/bf7341bc13cb5db0f05e85df46c16a13</icon>
   
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-08T12:17:11.270Z</updated>
+  <updated>2023-10-15T15:05:36.935Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>竹隐篇</title>
+    <link href="http://example.com/2023/10/15/%E7%AB%B9%E5%BD%B1%E7%AF%87/"/>
+    <id>http://example.com/2023/10/15/%E7%AB%B9%E5%BD%B1%E7%AF%87/</id>
+    <published>2023-10-15T14:45:31.000Z</published>
+    <updated>2023-10-15T15:05:36.935Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;癸卯年壬戌月庚子日——癸卯年壬戌月丙午日&quot;&gt;&lt;a href=&quot;#癸卯年壬戌月庚子日——癸卯年壬戌月丙午日&quot; class=&quot;headerlink&quot;</summary>
+        
+      
+    
+    
+    
+    <category term="扬州慢" scheme="http://example.com/categories/%E6%89%AC%E5%B7%9E%E6%85%A2/"/>
+    
+    
+    <category term="学习周报" scheme="http://example.com/tags/%E5%AD%A6%E4%B9%A0%E5%91%A8%E6%8A%A5/"/>
+    
+  </entry>
   
   <entry>
     <title>第一式_词法分析</title>
