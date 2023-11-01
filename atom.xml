@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-22T15:30:29.218Z</updated>
+  <updated>2023-11-01T07:52:25.978Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第二式-语法分析</title>
+    <link href="http://example.com/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/"/>
+    <id>http://example.com/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/</id>
+    <published>2023-11-01T07:29:03.000Z</published>
+    <updated>2023-11-01T07:52:25.978Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;语法分析&quot;&gt;&lt;a href=&quot;#语法分析&quot; class=&quot;headerlink&quot; title=&quot;语法分析&quot;&gt;&lt;/a&gt;语法分析&lt;/h1&gt;&lt;h2 id=&quot;一、预测分析法&quot;&gt;&lt;a href=&quot;#一、预测分析法&quot; class=&quot;headerlink&quot; title=&quot;一、预测分析法&quot;&gt;&lt;/a&gt;一、预测分析法&lt;/h2&gt;&lt;h3 id=&quot;1-1、概述&quot;&gt;&lt;a href=&quot;#1-1、概述&quot; class=&quot;headerlink&quot; title=&quot;1.1、概述&quot;&gt;&lt;/a&gt;1.1、概述&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;与自顶向下分析方法需要回溯不同，该方法不需要回溯&lt;/li&gt;
+&lt;li&gt;在该方法中关键的数据结构是栈</summary>
+    
+    
+    
+    <category term="明月沉西海" scheme="http://example.com/categories/%E6%98%8E%E6%9C%88%E6%B2%89%E8%A5%BF%E6%B5%B7/"/>
+    
+    
+    <category term="编译原理" scheme="http://example.com/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/"/>
+    
+  </entry>
   
   <entry>
     <title>竹隐篇</title>

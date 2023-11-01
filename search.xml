@@ -342,6 +342,31 @@
       </tags>
   </entry>
   <entry>
+    <title>第二式-语法分析</title>
+    <url>/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/</url>
+    <content><![CDATA[<h1 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h1><h2 id="一、预测分析法"><a href="#一、预测分析法" class="headerlink" title="一、预测分析法"></a>一、预测分析法</h2><h3 id="1-1、概述"><a href="#1-1、概述" class="headerlink" title="1.1、概述"></a>1.1、概述</h3><ul>
+<li>与自顶向下分析方法需要回溯不同，该方法不需要回溯</li>
+<li>在该方法中关键的数据结构是栈<span id="more"></span></li>
+<li>算法大概步：<ul>
+<li>对于终结符或非终结符a，计算first（a）</li>
+<li>对于终结符或非终结符a，计算follow（a）</li>
+<li>基于以上两步构造分析表</li>
+</ul>
+</li>
+</ul>
+<h2 id="二、计算first集"><a href="#二、计算first集" class="headerlink" title="二、计算first集"></a>二、计算first集</h2><h3 id="2-1、算法步骤"><a href="#2-1、算法步骤" class="headerlink" title="2.1、算法步骤"></a>2.1、算法步骤</h3><p><img src="/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/first.png"></p>
+<h2 id="三、计算follow集"><a href="#三、计算follow集" class="headerlink" title="三、计算follow集"></a>三、计算follow集</h2><h3 id="3-1、算法步骤"><a href="#3-1、算法步骤" class="headerlink" title="3.1、算法步骤"></a>3.1、算法步骤</h3><p><img src="/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/follow.png"><br><img src="/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/follow2.png"></p>
+<h2 id="四、构造预测分析表"><a href="#四、构造预测分析表" class="headerlink" title="四、构造预测分析表"></a>四、构造预测分析表</h2><h3 id="4-1、算法步骤"><a href="#4-1、算法步骤" class="headerlink" title="4.1、算法步骤"></a>4.1、算法步骤</h3><p><img src="/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/LL1.png"></p>
+<h3 id="4-2、算法例子"><a href="#4-2、算法例子" class="headerlink" title="4.2、算法例子"></a>4.2、算法例子</h3><p><img src="/2023/11/01/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%AF%AD%E6%B3%95%E5%88%86%E6%9E%90/%E9%A2%84%E6%B5%8B%E5%88%86%E6%9E%90%E4%BE%8B%E5%AD%90.png"></p>
+<h2 id="五、自底向上分析法"><a href="#五、自底向上分析法" class="headerlink" title="五、自底向上分析法"></a>五、自底向上分析法</h2>]]></content>
+      <categories>
+        <category>明月沉西海</category>
+      </categories>
+      <tags>
+        <tag>编译原理</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>第二式_进程和线程</title>
     <url>/2023/10/06/%E7%AC%AC%E4%BA%8C%E5%BC%8F-%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</url>
     <content><![CDATA[<p><code>1. 操作系统为了更好的管理硬件资源，应用了很多抽象的概念</code></p>
