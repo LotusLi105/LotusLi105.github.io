@@ -171,6 +171,22 @@
       </tags>
   </entry>
   <entry>
+    <title>双指针</title>
+    <url>/2024/02/21/%E5%8F%8C%E6%8C%87%E9%92%88/</url>
+    <content><![CDATA[<h2 id="1-最小覆盖子串"><a href="#1-最小覆盖子串" class="headerlink" title="1.最小覆盖子串"></a>1.最小覆盖子串</h2><span id="more"></span>
+<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p><img src="/2024/02/21/%E5%8F%8C%E6%8C%87%E9%92%88/76.png"></p>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">string minWindow(string S, string T) &#123;</span><br><span class="line">vector&lt;int&gt; chars(128, 0);</span><br><span class="line">vector&lt;bool&gt; flag(128, false);</span><br><span class="line">// 先统计T中的字符情况</span><br><span class="line">for(int i = 0; i &lt; T.size(); ++i) &#123;</span><br><span class="line">flag[T[i]] = true;</span><br><span class="line">++chars[T[i]];</span><br><span class="line">&#125;</span><br><span class="line">// 移动滑动窗口，不断更改统计数据</span><br><span class="line">int cnt = 0, l = 0, min_l = 0, min_size = S.size() + 1;</span><br><span class="line">for (int r = 0; r &lt; S.size(); ++r) &#123;</span><br><span class="line">if (flag[S[r]]) &#123;</span><br><span class="line">if (--chars[S[r]] &gt;= 0) &#123;</span><br><span class="line">++cnt;</span><br><span class="line">&#125;</span><br><span class="line">// 若目前滑动窗口已包含T中全部字符，</span><br><span class="line">// 则尝试将l右移，在不影响结果的情况下获得最短子字符串</span><br><span class="line">while (cnt == T.size()) &#123;</span><br><span class="line">if (r - l + 1 &lt; min_size) &#123;</span><br><span class="line">min_l = l;</span><br><span class="line">min_size = r - l + 1;</span><br><span class="line">&#125;</span><br><span class="line">if (flag[S[l]] &amp;&amp; ++chars[S[l]] &gt; 0) &#123;</span><br><span class="line">--cnt;</span><br><span class="line">&#125;</span><br><span class="line">++l;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">return min_size &gt; S.size()? &quot;&quot;: S.substr(min_l, min_size);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-环形链表"><a href="#2-环形链表" class="headerlink" title="2.环形链表"></a>2.环形链表</h2><h3 id="题目描述-1"><a href="#题目描述-1" class="headerlink" title="题目描述"></a>题目描述</h3><p><img src="/2024/02/21/%E5%8F%8C%E6%8C%87%E9%92%88/142.png"></p>
+<h3 id="题解-1"><a href="#题解-1" class="headerlink" title="题解"></a>题解</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ListNode *detectCycle(ListNode *head) &#123;</span><br><span class="line">ListNode *slow = head, *fast = head;</span><br><span class="line">// 判断是否存在环路</span><br><span class="line">do &#123;</span><br><span class="line">if (!fast || !fast-&gt;next) return nullptr;</span><br><span class="line">fast = fast-&gt;next-&gt;next;</span><br><span class="line">slow = slow-&gt;next;</span><br><span class="line">&#125; while (fast != slow);</span><br><span class="line">// 如果存在，查找环路节点</span><br><span class="line">fast = head;</span><br><span class="line">while (fast != slow)&#123;</span><br><span class="line">slow = slow-&gt;next;</span><br><span class="line">fast = fast-&gt;next;</span><br><span class="line">&#125;</span><br><span class="line">return fast;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>游龙踏雪</category>
+      </categories>
+      <tags>
+        <tag>算法</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>竹隐篇</title>
     <url>/2023/10/15/%E7%AB%B9%E5%BD%B1%E7%AF%87/</url>
     <content><![CDATA[<div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
